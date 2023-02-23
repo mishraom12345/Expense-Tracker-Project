@@ -1,13 +1,17 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import { NavLink } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import AuthContext from "../store/AuthContext";
 
 export default function LogIn() {
+  const authCtx = useContext(AuthContext)
+  const isLoggedIn = authCtx.isLoggedIn
   const history = useNavigate();
   const emailInputref = useRef();
   const passwordInputref = useRef();
+
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -47,12 +51,46 @@ export default function LogIn() {
       .then((data) => {
         localStorage.setItem("token", data.idToken);
         console.log(data.idToken);
-        history("/welcome");
+        history('/welcome')
+       
       })
       .catch((err) => {
         alert(err.message);
       });
   };
+
+  const forgetPasswardHandler = (e)=>{
+    const enteredEmail = emailInputref.current.value;
+    e.preventDefault()
+    
+    fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCbUqvti92AIcJw4dvf-vjFT3Q7XGFgSRg',{
+      method:"POST",
+      body:JSON.stringify({
+        requestType:"PASSWORD_RESET",
+        email:enteredEmail
+      }),
+      headers:{
+        'Content-Type':'application/json'
+      }
+    }).then((res)=>{
+      if(res.ok){
+          return res.json();
+      }else{
+          return res.json().then((data)=>{
+              if(data && data.error && data.error.message){
+                  let errMessage = "Authentication Failed, " + data.error.message;
+                  throw new Error(errMessage);
+              }
+          })
+      }
+  }).then((data)=>{
+    alert('passward reset link send plz chechk email')
+    console.log(data);
+  }).catch((err)=>{
+    alert(err.message);
+  })
+
+  }
 
   return (
     <div>
@@ -104,13 +142,11 @@ export default function LogIn() {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Forget passward??{" "}
-                        <a href="{''}" className="text-primary fw-bold">
-                          forget passward
-                        </a>
+                        <Button variant="link" onClick={forgetPasswardHandler}>forget passward</Button>
                       </p>
                       <NavLink style={{textAlign:'center'}}>
                           
-
+                      New User??{" "}
                           <Link to ='/signup' >
                           
                           Sign up
