@@ -1,19 +1,57 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import AuthContext from '../store/AuthContext';
 
 function CompleteProfile() {
+  const [displayName, setDisplayName] = useState("");
+  const [urlLink, setUrlLink] = useState("");
+  
     //const authCtx = useContext(AuthContext)
     let token = localStorage.getItem('token')
     const nameRef = useRef()
     const photourlRef = useRef()
+    
+
+  const getSavedData = () => {
+    let URL =
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCbUqvti92AIcJw4dvf-vjFT3Q7XGFgSRg";
+
+    fetch(URL, {
+      method: "POST",
+      body: JSON.stringify({
+        idToken: token,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }})
+      .then((data) => {
+        console.log(data);
+        setDisplayName(data.users[0].displayName);
+        setUrlLink(data.users[0].photoUrl);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getSavedData();
+  }, []);
+
+
+    
     const submitHandler = (e) => {
         e.preventDefault();
 
-        var enteredName = nameRef.current.value;
-        var enteredUrl = photourlRef.current.value;
-
+        const enteredName = nameRef.current.value;
+        const enteredUrl = photourlRef.current.value;
+        
     let url='https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCbUqvti92AIcJw4dvf-vjFT3Q7XGFgSRg';
         fetch(url,{
             method:"POST",
@@ -44,9 +82,9 @@ function CompleteProfile() {
         })
 
         
-
     }
 
+      
     
   return (
    <div style={{margin:'12%',paddingBottom:'20%',}}>
@@ -59,7 +97,7 @@ function CompleteProfile() {
       </Button> */}
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Full Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter Name" ref={nameRef} />
+        <Form.Control type="text" placeholder="Enter Name" ref={nameRef} defaultValue={displayName} />
         <Form.Text className="text-muted">
           We'll never share your Name with anyone else.
         </Form.Text>
@@ -67,7 +105,7 @@ function CompleteProfile() {
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Enter Photo Url</Form.Label>
-        <Form.Control type="text" placeholder="photo url" ref={photourlRef} />
+        <Form.Control type="text" placeholder="photo url" ref={photourlRef} defaultValue={urlLink} />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicCheckbox">
         <Form.Check type="checkbox" label="Check me out"  />
