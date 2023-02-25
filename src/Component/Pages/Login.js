@@ -36,6 +36,8 @@ export default function LogIn() {
     )
       .then((res) => {
         if (res.ok) {
+          const replacedEmailId =enteredEmail.replace("@", "").replace(".", "");
+          localStorage.setItem('email',replacedEmailId)
           return res.json();
         } else {
           res.json().then((data) => {

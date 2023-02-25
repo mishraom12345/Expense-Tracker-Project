@@ -1,7 +1,10 @@
 import React, { useContext } from 'react'
 import { Button } from 'react-bootstrap'
+import { confirmAlert } from 'react-confirm-alert'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../store/AuthContext'
+import { Form } from 'react-bootstrap'
+import Expenses from './Expenses'
 const Welcome = () => {
   const authCtx =  useContext(AuthContext)
   const isLoggedIn = authCtx.isLoggedIn
@@ -38,21 +41,26 @@ const Welcome = () => {
 
   const LogoutHandler = ()=>{
     authCtx.Logout()
+    
+          localStorage.removeItem('email')
+    
     history('/')
 
   }
     return (
      <div>
-      { <div>
+       <div>
        <h5> Welcome to Expense Tracker</h5>
       <p style={{textAlign:'right'}}>
       <Button variant="outline-danger" onClick={LogoutHandler}>Log Out</Button>
-      <Button variant="outline-primary" onClick={Varifyemail}>varify email</Button>
+      <Button variant="outline-primary" onClick={Varifyemail} style={{margin:'3px'}}>varify email</Button>
       Your profile is incomplete 
-      {<Link to='/completeprofile'>Complete now</Link>}
+      {<Button variant='outline-primary'><Link to='/completeprofile'>Complete now</Link></Button>}
       </p>  
       <hr/>
-      </div>}
+     
+      </div>
+      <Expenses/>
      </div>
     )
   }
