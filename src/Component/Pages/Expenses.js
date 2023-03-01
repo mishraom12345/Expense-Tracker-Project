@@ -21,7 +21,7 @@ function Expenses() {
        
         e.preventDefault()
          
-
+      
     
   
 
@@ -46,12 +46,14 @@ function Expenses() {
       }
   }).then((data)=>{
     setExpensesData((data) => [...data, expenses]);
+    
     //alert('passward reset link send plz chechk email')
     //console.log(data);
   }).catch((err)=>{
     alert(err.message);
   })
 
+  //setExpensesData('')
   
   
     }
@@ -103,13 +105,55 @@ function Expenses() {
  
      } 
      
-     
+    
  
      useEffect(() => {
          getSavedData();
         
        }, []);
 
+       const deletehandler = (id)=>{
+        
+        fetch(`https://expense-tracker-project-c7912-default-rtdb.firebaseio.com/Expenses/${localStorage.getItem('email')}/${id}.json`,{
+          method:"DELETE",
+          
+          headers:{
+            'Content-Type':'application/json'
+          }
+        }).then((res)=>{
+          if(res.ok){
+            
+              return res.json();
+          }else{
+              return res.json().then((data)=>{
+                  if(data && data.error && data.error.message){
+                      let errMessage = "Authentication Failed, " + data.error.message;
+                      throw new Error(errMessage);
+                  }
+              })
+          }
+      }).then((data)=>{
+       getSavedData()
+        //setExpensesData((data) => [...data, expenses]);
+        //alert('passward reset link send plz chechk email')
+        //console.log(data);
+      }).catch((err)=>{
+        alert(err.message);
+      })
+    
+      
+      
+        }
+
+        const Edithandler = (item)=>{
+          
+            setmoney(item.money)
+            setdes(item.description)
+            setcat(item.category)
+            deletehandler(item.id)
+        }
+
+       
   return (
     <div style={{ }}>
        <Form style={{width:'50%',alignContent:'center', margin:'auto',border:'1x',boxShadow:'5px',background:'Card'}} onSubmit = {submitHandler}>
@@ -146,10 +190,12 @@ function Expenses() {
     <div>
     {
       expensedata.map((item,index)=>(
-        <div key = {index}>
+        <div key = {index} style={{marginLeft:'20%'}}>
           <p>amount:-{item.money}{'      '}
           description:-- {item.description}{'     '}
         {'  '}  category:-- {item.category}</p>
+        <Button variant='success'onClick={()=>deletehandler(item.id)}>Delete</Button>{'  '}
+        <Button onClick={()=>Edithandler(item)}>Edit</Button>
           <hr/> 
         </div>
          
