@@ -7,15 +7,15 @@ import "../node_modules/react-bootstrap/dist/react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter } from 'react-router-dom';
 import { AuthContextProvider } from './Component/store/AuthContext';
+import { Provider } from 'react-redux';
+import store from './Component/store/AuthReducer';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <AuthContextProvider>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-    </AuthContextProvider>
+    <Provider store = {store}><App/></Provider>
+    
   </BrowserRouter>
 );
 

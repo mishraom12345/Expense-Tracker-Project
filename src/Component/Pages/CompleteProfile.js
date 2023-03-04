@@ -1,14 +1,16 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import AuthContext from '../store/AuthContext';
+//import AuthContext from '../store/AuthContext';
+import { useSelector } from 'react-redux';
 
 function CompleteProfile() {
   const [displayName, setDisplayName] = useState("");
   const [urlLink, setUrlLink] = useState("");
   
     //const authCtx = useContext(AuthContext)
-    let token = localStorage.getItem('token')
+    // let token = localStorage.getItem('token')
+    let token = useSelector(state=>state.authAction.idToken)
     const nameRef = useRef()
     const photourlRef = useRef()
     
@@ -77,6 +79,7 @@ function CompleteProfile() {
                 }
         }).then((data)=>{
             console.log(data);
+            alert('sucessfully updated')
         }).catch((err)=>{
             alert(err.message);
         })

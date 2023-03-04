@@ -3,11 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import { NavLink } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import AuthContext from "../store/AuthContext";
+//import AuthContext from "../store/AuthContext";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { authAction } from "../store/AuthReducer";
 
 export default function LogIn() {
-  const authCtx = useContext(AuthContext)
-  const isLoggedIn = authCtx.isLoggedIn
+  const dispatch = useDispatch()
+  //useSelector(state=>state.isLogin)
+  //const authCtx = useContext(AuthContext)
+  //const isLoggedIn = authCtx.isLoggedIn
   const history = useNavigate();
   const emailInputref = useRef();
   const passwordInputref = useRef();
@@ -17,7 +22,8 @@ export default function LogIn() {
     e.preventDefault();
     const enteredEmail = emailInputref.current.value;
     const enteredpassword = passwordInputref.current.value;
-    localStorage.setItem("userEmail", enteredEmail);
+    
+    //localStorage.setItem("userEmail", enteredEmail);
     //console.log(enteredEmail,enteredpassword)
 
     fetch(
@@ -51,7 +57,9 @@ export default function LogIn() {
         }
       })
       .then((data) => {
-        localStorage.setItem("token", data.idToken);
+        dispatch(authAction.Login(data.idToken))
+        //localStorage.setItem("token", data.idToken);
+
         console.log(data.idToken);
         history('/welcome')
        
