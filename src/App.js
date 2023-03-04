@@ -8,22 +8,33 @@ import Welcome from './Component/Pages/Welcome';
 import { useContext, useState } from 'react';
 import AuthContext from './Component/store/AuthContext';
 import CompleteProfile from './Component/Pages/CompleteProfile';
+import { Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
 
 function App() {
+  const show = useSelector(state=>state.authAction.isLogin)
+  const dark = useSelector(state=>state.dark.showDarkTheme)
+  console.log(dark)
   const [user,setuser] = useState(false)
   const authCtx = useContext(AuthContext)
   const isLoggedIn = authCtx.isLoggedIn
   
+  const [showDarkTheme,setshowDarkTheme] = useState(dark)
   return (
-    <div>
-    <Header/>
+    <div style={{backgroundColor:dark?'darkslategrey':'lightgrey'}}  >
+    
+    {<Header/>}
+    
     <Routes>
     
      {<Route path='signup' element={<SignUP/>} />}
      {<Route  path='/' element={<Login/>}/>}
      {<Route path='/welcome' element={<Welcome/>}/>}
+     
      {<Route path='completeprofile' element = {<CompleteProfile/>}/>}
     </Routes>
+    
     </div>
   );
 }
