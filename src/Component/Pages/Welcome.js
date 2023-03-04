@@ -8,8 +8,6 @@ import Expenses from './Expenses'
 //import { stringify } from 'csv-stringify/.'
 import { CSVLink } from 'react-csv';
 import DownloadButton from './DownLoad'
-
-
 import { useDispatch } from 'react-redux'
 import { authAction } from '../store/AuthReducer'
 import { darkAction } from '../store/AuthReducer'
@@ -20,6 +18,8 @@ const Welcome = () => {
   
   //console.log(expensedata)
   const dark = useSelector(state=>state.dark.showDarkTheme)
+  const showactivefeature = useSelector(state=>state.activePremium.showFeature)
+  
   const dispatch = useDispatch()
     const idToken = useSelector(state=>state.idToken)
   // const authCtx =  useContext(AuthContext)
@@ -85,12 +85,12 @@ const Welcome = () => {
        <div>
        <h5> Welcome to Expense Tracker</h5>
 
-       <DownloadButton/>
+       {showactivefeature&&<DownloadButton/>}
        
        
        
       <p style={{textAlign:'right'}}>
-      <Button variant="outline-dark" onClick={darkhandler}>{dark?'light Theme': 'dark theme'}</Button>
+      {showactivefeature&&<Button variant="outline-dark" onClick={darkhandler}>{dark?'light Theme': 'dark theme'}</Button>}
       {<Button variant="outline-danger" onClick={LogoutHandler}>Log Out</Button>}
       <Button variant="outline-primary" onClick={Varifyemail} style={{margin:'3px'}}>varify email</Button>
       Your profile is incomplete 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Form,Button } from 'react-bootstrap'
 import { useEffect } from 'react'
-import { expensesActions } from '../store/AuthReducer'
+import { activePremiumAction, expensesActions } from '../store/AuthReducer'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 
 function Expenses() {
     
     const expensedata = useSelector(state=>state.expense.expenses)
-    console.log(expensedata)
+    //console.log(expensedata)
     console.log('hari ')
     const [money ,setmoney]=useState('')
     const [des,setdes]=useState('')
@@ -53,10 +53,15 @@ function Expenses() {
           })
       }
   }).then((data)=>{
+    console.log(data)
+    getSavedData()
+    
     //setExpensesData((data) => [...data, expenses]);
-    const hari =  [...data, expenses]
-    console.log(hari)
-    dispatch(expensesActions.setexpenses(hari))
+    // const hari =  [...data, expenses]
+    // console.log(hari)
+    // dispatch(expensesActions.setexpenses(hari))
+    //console.log(expensedata)
+
     
     //alert('passward reset link send plz chechk email')
     //console.log(data);
@@ -77,7 +82,7 @@ function Expenses() {
              if(res.ok){
                //console.log(res)
                
-               console.log('run ho gaya hai')
+               //console.log('run ho gaya hai')
  
                  return res.json();
              }else{
@@ -94,7 +99,10 @@ function Expenses() {
 
            const myarr = []
             let sum = 0
-            console.log(data)
+            //console.log(data)
+            // const keys = Object.keys(data)
+            // console.log(keys)
+            //console.log(data[keys[0]])
            for (let i in data){
             myarr.push({
               id:i,
@@ -177,6 +185,10 @@ function Expenses() {
             deletehandler(item.id)
         }
 
+        const activePremiumHandler= ()=>{
+          dispatch(activePremiumAction.ShowActiveFeature())
+        }
+
        
   return (
     <div style={{ }}>
@@ -206,7 +218,7 @@ function Expenses() {
       <Button variant="primary" type="submit">
         Add Expense
       </Button>
-      {totalMoney>=10000&&<Button variant='danger'>Active premium Button</Button>}
+      {totalMoney>=10000&&<Button variant='danger' onClick={activePremiumHandler}>Active premium Button</Button>}
       
     </Form>
     <h3>Total money ={totalMoney} </h3>

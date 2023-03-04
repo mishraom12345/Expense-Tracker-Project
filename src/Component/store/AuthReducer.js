@@ -41,6 +41,22 @@ const darkslice = createSlice({
     }
 })
 
+const initialState3 = {
+    showFeature:false
+}
+
+const activePremiumslice = createSlice({
+    name:'activePremium',
+    initialState:initialState3,
+    reducers:{
+        ShowActiveFeature(state){
+            state.showFeature = !state.showFeature
+        }
+    }
+})
+
+
+
 const initialValues = {
     expenses: [],
     total: 0,
@@ -61,8 +77,10 @@ export const expensesActions = expensesSlice.actions;
 
 export const darkAction = darkslice.actions
 
+export const activePremiumAction = activePremiumslice.actions
+
 const store = configureStore({
-    reducer:{authAction:authslice.reducer,dark:darkslice.reducer,expense:expensesSlice.reducer}
+    reducer:{authAction:authslice.reducer,dark:darkslice.reducer,expense:expensesSlice.reducer ,activePremium:activePremiumslice.reducer}
 })
 
 export const authAction = authslice.actions

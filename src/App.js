@@ -10,6 +10,7 @@ import AuthContext from './Component/store/AuthContext';
 import CompleteProfile from './Component/Pages/CompleteProfile';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import DownloadButton from './Component/Pages/DownLoad';
 
 
 function App() {
