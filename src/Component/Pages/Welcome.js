@@ -5,6 +5,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../store/AuthContext'
 import { Form } from 'react-bootstrap'
 import Expenses from './Expenses'
+//import { stringify } from 'csv-stringify/.'
+import { CSVLink } from 'react-csv';
+import DownloadButton from './DownLoad'
+
 
 import { useDispatch } from 'react-redux'
 import { authAction } from '../store/AuthReducer'
@@ -13,7 +17,7 @@ import { useSelector } from 'react-redux'
 
 
 const Welcome = () => {
-  const downloaddata = useSelector(state=>state.expense.expenses)
+  
   //console.log(expensedata)
   const dark = useSelector(state=>state.dark.showDarkTheme)
   const dispatch = useDispatch()
@@ -62,19 +66,28 @@ const Welcome = () => {
     dispatch(darkAction.showDark())
   }
 
-  // <a id='a1' download='file1.text'> download expenses</a>
-  // const mycsv = (row)=>{
-  //   return row.map(r=>r.join(",").join("/n"))
-  // } 
-  //  const a1 = document.getElementById('a1')
-  //  const blob1 = new Blob(['ggcg' ],{type:'text'})
-  //  a1.href = URL.createObjectURL(blob1)
+  //  <a id='a1' download='file1.text'> download expenses</a>
+  // function mycsv(row){
+  //    return(row.map((r)=>{
+  //     r.join(",")
+  //    }).join("/n")) 
+  //  } 
+  //   const a1 = document.getElementById('a1')
+  //  const blob1 = new Blob([mycsv(downloaddata)])
+  //   a1.href = URL.createObjectURL(blob1)
+
+  
+  
+ 
     return (
       
      <div>
        <div>
        <h5> Welcome to Expense Tracker</h5>
-       <a id='a1' download='file1.csv'> download expenses</a>
+
+       <DownloadButton/>
+       
+       
        
       <p style={{textAlign:'right'}}>
       <Button variant="outline-dark" onClick={darkhandler}>{dark?'light Theme': 'dark theme'}</Button>
